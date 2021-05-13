@@ -23,4 +23,4 @@ const ValidateDTO = (type, param) => {
   };
 };
 
-module.exports = { ValidateDTO };
+module.exports = ValidateDTO;

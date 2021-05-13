@@ -23,4 +23,10 @@ const user = mongoose.model(
   }),
 );
 
-module.exports = { user };
+const adminSchema = require("./admin");
+const admin = user.discriminator(
+  "admin",
+  createSchema(userSchema, adminSchema, {}),
+);
+
+module.exports = { user, admin };

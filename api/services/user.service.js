@@ -1,15 +1,11 @@
-const { user } = require("../models/user");
-const md5 = require("md5");
-const jwt = require("jsonwebtoken");
-
-const hashCreate = (password) => {
-  return md5(password + hashSecret);
-};
+const { user } = require("../models/index");
+const crypto = require("../utils/crypto.utils");
+const userMapper = require("../mappers/user.mapper");
 
 const userValid = async (email, password) => {
   return (await user.findOne({
     email,
-    password: md5(`${password}${process.env.MD5_SECRET}`),
+    password: crypto.createHash(password),
   }))
     ? true
     : false;
@@ -20,26 +16,31 @@ const credencialCreate = async (userEmail) => {
     email: userEmail,
   });
 
-  const { id, email } = userDB;
+  const userDTO = userMapper.toUserDTO(userDB);
 
-  const credential = {
-    token: jwt.sign({ email }, process.env.JWT_SECRET, {
-      expiresIn: `${process.env.JWT_VALID_TIME}ms`,
-    }),
-
-    user: {
-      id,
-      email,
-    },
+  return {
+    token: crypto.createToken(userDTO),
+    userDTO,
   };
-  return credential;
 };
+//   const { id, email } = userDB;
+
+//   const credential = {
+//     token: jwt.sign({ email }, process.env.JWT_SECRET, {
+//       expiresIn: `${process.env.JWT_VALID_TIME}ms`,
+//     }),
+
+//     user: {
+//       id,
+//       email,
+
+//       userType: 1,
+//     },
+//   };
+//   return credential;
 
 const authenticate = async (email, password) => {
-  user.findOne;
-
   const resultFromDB = await userValid(email, password);
-
   if (resultFromDB) {
     return {
       success: false,
@@ -57,7 +58,7 @@ const authenticate = async (email, password) => {
 
 const create = async () => {
   return user.create({
-    email: "teste@teste.com",
+    email: "admin@teste.com",
     password: md5(`123123${process.env.MD5_SECRET}`),
   });
 };
