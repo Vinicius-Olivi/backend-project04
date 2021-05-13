@@ -41,7 +41,7 @@ const credencialCreate = async (userEmail) => {
 
 const authenticate = async (email, password) => {
   const resultFromDB = await userValid(email, password);
-  if (resultFromDB) {
+  if (!resultFromDB) {
     return {
       success: false,
       message: "it was not possible to authenticate the user",
