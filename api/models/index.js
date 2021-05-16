@@ -15,6 +15,7 @@ const createSchema = (model, modelChild, options = {}) => {
   );
 };
 
+// USERS
 const userSchema = require("./user");
 const user = mongoose.model(
   "user",
@@ -29,4 +30,14 @@ const admin = user.discriminator(
   createSchema(userSchema, adminSchema, {}),
 );
 
-module.exports = { user, admin };
+// CATEGORY
+
+const categorySchema = require("./category");
+const category = mongoose.model(
+  "category",
+  createSchema(undefined, categorySchema, {
+    collection: " CategoryCollection",
+  }),
+);
+
+module.exports = { user, admin, category };
