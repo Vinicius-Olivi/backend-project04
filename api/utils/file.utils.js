@@ -8,6 +8,10 @@ const createAddress = (destiny, fileName = "") => {
   return path.join(addressSource, destiny, fileName);
 };
 
+const createDownloadAddress = (origin, fileName) => {
+  return path.join("/static", origin, fileName);
+};
+
 const createName = (type) => {
   const treatedType = type.split("/")[1];
   return `${uuid()}.${treatedType}`;
@@ -17,8 +21,18 @@ const move = (temporary, definitive) => {
   return fs.renameSync(temporary, definitive);
 };
 
+const remove = (origin, file) => {
+  const addressFile = createAddress(origin, file);
+
+  if (fs.existsSync(addressFile)) fs.unlinkSync(addressFile);
+
+  return;
+};
+
 module.exports = {
   createAddress,
+  createDownloadAddress,
   createName,
   move,
+  remove,
 };

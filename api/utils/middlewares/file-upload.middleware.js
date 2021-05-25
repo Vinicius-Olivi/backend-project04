@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const formidable = require("formidable");
-const fileUtils = require("./file.utils");
+const fileUtils = require("../file.utils");
 
 const fileUpload = (destiny) => {
   const form = formidable.IncomingForm();
@@ -16,8 +16,8 @@ const fileUpload = (destiny) => {
         });
       }
 
-      const newVolume = fileUtils.createName(files.image.type);
-      const newPath = fileUtils.createAddress(destiny, newVolume);
+      const newName = fileUtils.createName(files.image.type);
+      const newPath = fileUtils.createAddress(destiny, newName);
 
       req.body = {
         ...fields,

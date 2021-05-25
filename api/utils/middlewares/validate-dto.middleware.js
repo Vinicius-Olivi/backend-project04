@@ -1,8 +1,8 @@
-const joi = require("joi");
+const Joi = require("joi");
 
 const ValidateDTO = (type, param, options = {}) => {
   return (req, res, next) => {
-    const schema = joi.object().keys(param);
+    const schema = Joi.object().keys(param);
 
     const result = schema.validate(req[type], {
       allowUnknown: false,

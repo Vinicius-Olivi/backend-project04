@@ -30,6 +30,14 @@ const admin = user.discriminator(
   createSchema(userSchema, adminSchema, {}),
 );
 
+// supplier
+
+const supplierSchema = require("./supplier");
+const supplier = user.discriminator(
+  "supplier",
+  createSchema(userSchema, supplierSchema, {}),
+);
+
 // CATEGORY
 
 const categorySchema = require("./category");
@@ -40,4 +48,4 @@ const category = mongoose.model(
   }),
 );
 
-module.exports = { user, admin, category };
+module.exports = { user, admin, supplier, category };

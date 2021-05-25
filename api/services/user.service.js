@@ -2,6 +2,12 @@ const { user } = require("../models/index");
 const crypto = require("../utils/crypto.utils");
 const userMapper = require("../mappers/user.mapper");
 
+const ifEmailExist = async (email) => {
+  const users = await user.find({ email });
+
+  return users.length > 0 ? true : false;
+};
+
 const userValid = async (email, password) => {
   return (await user.findOne({
     email,
@@ -23,21 +29,6 @@ const credencialCreate = async (userEmail) => {
     userDTO,
   };
 };
-//   const { id, email } = userDB;
-
-//   const credential = {
-//     token: jwt.sign({ email }, process.env.JWT_SECRET, {
-//       expiresIn: `${process.env.JWT_VALID_TIME}ms`,
-//     }),
-
-//     user: {
-//       id,
-//       email,
-
-//       userType: 1,
-//     },
-//   };
-//   return credential;
 
 const authenticate = async (email, password) => {
   const resultFromDB = await userValid(email, password);
@@ -66,4 +57,5 @@ const create = async () => {
 module.exports = {
   authenticate,
   create,
+  ifEmailExist,
 };
