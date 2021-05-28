@@ -1,5 +1,6 @@
 const { supplier } = require("../models/index");
 const { ifEmailExist } = require("../services/user.service");
+const { toListItemDTO } = require("../mappers/supplier.mapper");
 const { createHash } = require("../utils/crypto.utils");
 
 const ifCrnExist = async (crn) => {
@@ -10,9 +11,32 @@ const ifCrnExist = async (crn) => {
   return result.length > 0 ? true : false;
 };
 
-const create = async (model) => {
-  console.log("supplier.service");
+const statusUpdate = async (id, status) => {
+  const supplierDB = await supplier.findById(id);
 
+  if (!supplierDB) {
+    return {
+      success: false,
+      message: "operacao nao pode ser realizada",
+      details: [
+        "Nao existe fornecedor cadastrado para o fornecedor id informado",
+      ],
+    };
+  }
+
+  supplierDB.status = status;
+  await supplierDB.save();
+
+  return {
+    success: true,
+    message: " Operacao realizada com sucesso",
+    data: {
+      ...toListItemDTO(supplierDB.toJSON()),
+    },
+  };
+};
+
+const create = async (model) => {
   const { email, crn, password, ...rest } = model;
 
   if (await ifCrnExist(crn))
@@ -41,8 +65,16 @@ const create = async (model) => {
     success: true,
     message: "operacao realizada com sucesso",
     data: {
-      ...newSupplier,
+      ...toListItemDTO(newSupplier),
     },
   };
 };
-module.exports = { create };
+
+const listAll = async (filter) => {
+  const resultDB = await supplier.find();
+
+  return resultDB.map((item) => {
+    return toListItemDTO(item);
+  });
+};
+module.exports = { create, statusUpdate, listAll };

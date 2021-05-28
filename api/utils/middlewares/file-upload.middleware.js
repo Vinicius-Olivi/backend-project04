@@ -3,8 +3,11 @@ const fs = require("fs");
 const formidable = require("formidable");
 const fileUtils = require("../file.utils");
 
+//testar KEEP EXTENSION
 const fileUpload = (destiny) => {
-  const form = formidable.IncomingForm();
+  const form = formidable.IncomingForm({
+    keepExtensions: true,
+  });
   form.uploadDir = fileUtils.createAddress("temp");
 
   return (req, res, next) => {

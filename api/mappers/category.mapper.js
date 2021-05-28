@@ -7,7 +7,7 @@ const toItemListDTO = (model) => {
     id: _id,
     name,
     status,
-    image: fileUtils.createDownloadAddress("categories", image.name),
+    image: fileUtils.createDownloadAddress("categories", image.name || ""),
   };
 };
 
@@ -18,7 +18,7 @@ const toDTO = (model) => {
     id: _id,
     name,
     status,
-    image: fileUtils.createDownloadAddress("categories", image.name),
+    image: fileUtils.createDownloadAddress("categories", image.name || ""),
   };
 };
 
