@@ -10,7 +10,7 @@ const create = async (req, res, next) => {
     ? { data: serviceResult.data }
     : { details: serviceResult.details };
 
-  return res.status(200).send();
+  return res.status(resultReturn).send(returnData);
 };
 
 const list = async (req, res, next) => {
@@ -20,16 +20,48 @@ const list = async (req, res, next) => {
   });
 };
 
-const update = (req, res, next) => {
-  return res.status(200).send([]);
+const update = async (req, res, next) => {
+  const { params, body } = req;
+
+  const serviceResult = await categoryService.categoryUpdate(
+    params.categoryid,
+    body,
+  );
+
+  const resultReturn = serviceResult.success ? 200 : 400;
+  const returnData = serviceResult.success
+    ? { data: serviceResult.data }
+    : { details: serviceResult.details };
+
+  return res.status(resultReturn).send(returnData);
 };
 
-const searchById = (req, res, next) => {
-  return res.status(200).send([]);
+const searchById = async (req, res, next) => {
+  const { params } = req;
+  //TODO: acionar busvar por id no  servico
+  const category = await categoryService.searchById(params.categoryid);
+
+  if (!category)
+    return res.status(404).send({
+      details: ["category informada nao existe"],
+    });
+
+  return res.status(200).send(category);
 };
 
-const exclude = (req, res, next) => {
-  return res.status(200).send([]);
+const exclude = async (req, res, next) => {
+  const { params } = req;
+  const serviceResult = await categoryService.exclude(params.categoryid);
+
+  const resultReturn = serviceResult.success ? 200 : 400;
+
+  const returnData = serviceResult.success
+    ? {
+        message: serviceResult.message,
+      }
+    : { details: serviceResult.details };
+
+  return res.status(resultReturn).send(returnData);
 };
 
 module.exports = {

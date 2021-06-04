@@ -60,6 +60,7 @@ const exclude = async (categoryId) => {
       details: ["categoria nao existe"],
     };
   }
+  console.log(categoryDB);
 
   const { image } = categoryDB;
   fileUtils.remove("categories", image.name);
@@ -81,7 +82,7 @@ const categoryUpdate = async (categoryId, model) => {
     return {
       success: false,
       message: "nao foi possivel realizar a operacao",
-      details: "categoriaid nao existe",
+      details: ["categoriaid nao existe"],
     };
   }
 
@@ -90,15 +91,18 @@ const categoryUpdate = async (categoryId, model) => {
   categoryDB.name = model.name;
   categoryDB.description = model.description;
   categoryDB.status = model.status;
-  categoryDB.image = {
-    originalName: model.image.originalName,
-    name: model.image.newName,
-    type: model.image.type,
-  };
+
+  if (model.image) {
+    fileUtils.remove("categories", categoryDB.image.name);
+    fileUtils.move(model.image.originalPath, model.image.newPath);
+    categoryDB.image = {
+      originalName: model.image.originalName,
+      name: model.image.newName,
+      type: model.image.type,
+    };
+  }
 
   await categoryDB.save();
-
-  fileUtils.move(model.image.originalPath, model.image.newPath);
 
   return {
     success: true,

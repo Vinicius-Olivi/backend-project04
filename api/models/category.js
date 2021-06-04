@@ -11,8 +11,9 @@ module.exports = {
     type: Boolean,
     required: true,
   },
+  //origin
   image: {
-    origin: {
+    originName: {
       type: String,
       required: false,
     },

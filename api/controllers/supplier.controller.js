@@ -8,15 +8,15 @@ const activate = async (req, res, next) => {
     "Active",
   );
 
-  const codeReturn = serviceResult.success ? 200 : 400;
+  const resultReturn = serviceResult.success ? 200 : 400;
 
-  const dataReturn = serviceResult.success
+  const returnData = serviceResult.success
     ? {
         data: serviceResult.data,
       }
     : { details: serviceResult.details };
-  return res.status(codeReturn).send({
-    ...dataReturn,
+  return res.status(resultReturn).send({
+    ...returnData,
   });
 };
 const inactivate = async (req, res, next) => {
@@ -27,15 +27,15 @@ const inactivate = async (req, res, next) => {
     "Inactive",
   );
 
-  const codeReturn = serviceResult.success ? 200 : 400;
+  const resultReturn = serviceResult.success ? 200 : 400;
 
-  const dataReturn = serviceResult.success
+  const returnData = serviceResult.success
     ? {
         data: serviceResult.data,
       }
     : { details: serviceResult.details };
-  return res.status(codeReturn).send({
-    ...dataReturn,
+  return res.status(resultReturn).send({
+    ...returnData,
   });
 };
 
@@ -46,14 +46,14 @@ const create = async (req, res, next) => {
 
   //tratar saida
 
-  const codeReturn = result.success ? 200 : 400;
+  const resultReturn = result.success ? 200 : 400;
 
-  const dataReturn = result.success
+  const returnData = result.success
     ? {
         data: result.data,
       }
     : { details: result.details };
-  return res.status(codeReturn).send(dataReturn);
+  return res.status(resultReturn).send(returnData);
 };
 
 const list = async (req, res, next) => {

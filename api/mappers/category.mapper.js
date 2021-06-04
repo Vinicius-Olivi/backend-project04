@@ -12,11 +12,12 @@ const toItemListDTO = (model) => {
 };
 
 const toDTO = (model) => {
-  const { _id, name, status, image } = model;
+  const { _id, name, description, status, image } = model;
 
   return {
     id: _id,
     name,
+    description,
     status,
     image: fileUtils.createDownloadAddress("categories", image.name || ""),
   };

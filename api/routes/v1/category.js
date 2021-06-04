@@ -33,38 +33,64 @@ module.exports = (router) => {
     );
 
   router
-    .route("/category/:idcategory")
-    .get(categoryController.searchById)
-    .put(
+    .route("/category/:categoryid")
+    .get(
       ValidateDTO("param", {
-        idcategory: Joi.string().required().messages({
-          "any.required": "idcategory eh um campo obrigatorio",
-          "string.empty": "idcategory nao deve ser vazio",
-        }),
+        categoryid: Joi.string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            "any.required": "categoryid eh um campo obrigatorio",
+            "string.empty": "categoryid nao deve ser vazio",
+          }),
       }),
-      ValidateDTO("body", {
-        name: Joi.string().required().messages({
-          "any.required": "name eh um campo obrigatorio",
-          "string.empty": "name nao deve ser vazio",
-        }),
-        description: Joi.string().required().messages({
-          "any.required": "description eh um campo obrigatorio",
-          "string.empty": "description nao deve ser vazio",
-        }),
-        status: Joi.string().required().messages({
-          "any.required": "status eh um campo obrigatorio",
-          "boolean.empty": "status nao deve ser vazio",
-        }),
-      }),
-      categoryController.update,
+      categoryController.searchById,
     )
     .delete(
       ValidateDTO("param", {
-        idcategory: Joi.string().required().messages({
-          "any.required": "idcategory eh um campo obrigatorio",
-          "string.empty": "idcategory nao deve ser vazio",
-        }),
+        categoryid: Joi.string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            "any.required": "categoryid eh um campo obrigatorio",
+            "string.empty": "categoryid nao deve ser vazio",
+            "string.regex": `"categoria id" fora do formato experado`,
+          }),
       }),
       categoryController.exclude,
+    )
+    .put(
+      fileUploadMiddleware("categories", true),
+      ValidateDTO("params", {
+        categoryid: Joi.string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            "any.required": `"categoria id" é um campo obrigatório`,
+            "string.empty": `"categoria id" não deve ser vazio`,
+            "string.regex": `"categoria id" fora do formato experado`,
+          }),
+      }),
+      ValidateDTO(
+        "body",
+        {
+          name: Joi.string().required().messages({
+            "any.required": `"name" é um campo obrigatório`,
+            "string.empty": `"name" não deve ser vazio`,
+          }),
+          description: Joi.string().required().messages({
+            "any.required": `"description" é um campo obrigatório`,
+            "string.empty": `"description" não deve ser vazio`,
+          }),
+          status: Joi.boolean().required().messages({
+            "any.required": `"status" é um campo obrigatório`,
+            "booleam.empty": `"status" não deve ser vazio`,
+          }),
+        },
+        {
+          allowUnknown: true,
+        },
+      ),
+      categoryController.update,
     );
 };

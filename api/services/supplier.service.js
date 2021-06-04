@@ -2,6 +2,7 @@ const { supplier } = require("../models/index");
 const { ifEmailExist } = require("../services/user.service");
 const { toListItemDTO } = require("../mappers/supplier.mapper");
 const { createHash } = require("../utils/crypto.utils");
+const emailUtils = require("../utils/email");
 
 const ifCrnExist = async (crn) => {
   const result = await supplier.find({
@@ -25,8 +26,17 @@ const statusUpdate = async (id, status) => {
   }
 
   supplierDB.status = status;
+
   await supplierDB.save();
 
+  if (status === "Active") {
+    emailUtils.sendMessage({
+      receiver: supplierDB.email,
+      sender: process.env.SENDER,
+      subject: `Confirmacao do cadastro de ${supplierDB.fantasyName}`,
+      body: `acesso liberado`,
+    });
+  }
   return {
     success: true,
     message: " Operacao realizada com sucesso",
