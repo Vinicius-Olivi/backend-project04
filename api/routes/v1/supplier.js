@@ -73,45 +73,60 @@ module.exports = (router) => {
     supplierController.inactivate,
   );
 
-  router.route("/supplier/:supplierid/product").post(
-    fileUploadMiddleware("products"),
-    ValidateDTO("params", {
-      supplierid: Joi.string()
-        .regex(/^[0-9a-fA-F]{24}$/)
-        .required()
-        .messages({
-          "any.required": `"supplier id" é um campo obrigatório`,
-          "string.empty": `"supplier id" não deve ser vazio`,
-          "string.pattern.base": `"supplier id" fora do formato experado`,
-        }),
-    }),
-    ValidateDTO(
-      "body",
-      {
-        name: Joi.string().required().messages({
-          "any.required": `"name" é um campo obrigatório`,
-          "string.empty": `"name" não deve ser vazio`,
-        }),
-        description: Joi.string().required().messages({
-          "any.required": `"description" é um campo obrigatório`,
-          "string.empty": `"description" não deve ser vazio`,
-        }),
-        categoryid: Joi.string()
+  router
+    .route("/supplier/:supplierid/product")
+    .get(
+      ValidateDTO("params", {
+        supplierid: Joi.string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
-            "any.required": `"category id" é um campo obrigatório`,
-            "string.empty": `"category id" não deve ser vazio`,
-            "string.pattern.base": `"category id" fora do formato experado`,
+            "any.required": `"supplier id" é um campo obrigatório`,
+            "string.empty": `"supplier id" não deve ser vazio`,
+            "string.pattern.base": `"supplier id" fora do formato experado`,
           }),
-        price: Joi.number().required().messages({
-          "any.required": `"price" é um campo obrigatório`,
-        }),
-      },
-      {
-        allowUnknown: true,
-      },
-    ),
-    productController.create,
-  );
+      }),
+      supplierController.seacrhProductsBySupplier,
+    )
+    .post(
+      fileUploadMiddleware("products"),
+      ValidateDTO("params", {
+        supplierid: Joi.string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            "any.required": `"supplier id" é um campo obrigatório`,
+            "string.empty": `"supplier id" não deve ser vazio`,
+            "string.pattern.base": `"supplier id" fora do formato experado`,
+          }),
+      }),
+      ValidateDTO(
+        "body",
+        {
+          name: Joi.string().required().messages({
+            "any.required": `"name" é um campo obrigatório`,
+            "string.empty": `"name" não deve ser vazio`,
+          }),
+          description: Joi.string().required().messages({
+            "any.required": `"description" é um campo obrigatório`,
+            "string.empty": `"description" não deve ser vazio`,
+          }),
+          categoryid: Joi.string()
+            .regex(/^[0-9a-fA-F]{24}$/)
+            .required()
+            .messages({
+              "any.required": `"category id" é um campo obrigatório`,
+              "string.empty": `"category id" não deve ser vazio`,
+              "string.pattern.base": `"category id" fora do formato experado`,
+            }),
+          price: Joi.number().required().messages({
+            "any.required": `"price" é um campo obrigatório`,
+          }),
+        },
+        {
+          allowUnknown: true,
+        },
+      ),
+      productController.create,
+    );
 };

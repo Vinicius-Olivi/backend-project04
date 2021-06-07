@@ -10,30 +10,35 @@ module.exports = {
     type: String,
     required: false,
   },
-  status: {
-    type: Boolean,
+  price: {
+    type: Number,
     required: true,
   },
-  //origin
+
   image: {
     originName: {
       type: String,
-      required: false,
+      required: true,
     },
     name: {
       type: String,
-      required: false,
+      required: true,
     },
     type: {
       type: String,
-      required: false,
+      required: true,
     },
   },
 
-  products: [
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: "category",
+  },
+
+  supplier: [
     {
       type: Schema.Types.ObjectId,
-      ref: "product",
+      ref: "supplier",
     },
   ],
 };

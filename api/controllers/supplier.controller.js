@@ -19,6 +19,7 @@ const activate = async (req, res, next) => {
     ...returnData,
   });
 };
+
 const inactivate = async (req, res, next) => {
   const { supplierid } = req.params;
 
@@ -28,7 +29,6 @@ const inactivate = async (req, res, next) => {
   );
 
   const resultReturn = serviceResult.success ? 200 : 400;
-
   const returnData = serviceResult.success
     ? {
         data: serviceResult.data,
@@ -63,4 +63,18 @@ const list = async (req, res, next) => {
   });
 };
 
-module.exports = { create, list, activate, inactivate };
+const seacrhProductsBySupplier = async (req, res, next) => {
+  const { params } = req;
+  const data = await supplierService.listProductsBySupplier(params.supplierid);
+  return res.status(200).send({
+    data,
+  });
+};
+
+module.exports = {
+  create,
+  list,
+  activate,
+  inactivate,
+  seacrhProductsBySupplier,
+};

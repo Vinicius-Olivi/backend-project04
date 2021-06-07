@@ -5,9 +5,7 @@ const fileUtils = require("../file.utils");
 
 //testar KEEP EXTENSION
 const fileUpload = (destiny, isUpdate = false) => {
-  const form = formidable.IncomingForm({
-    keepExtensions: true,
-  });
+  const form = formidable.IncomingForm();
   form.uploadDir = fileUtils.createAddress("temp");
 
   return (req, res, next) => {
@@ -16,7 +14,7 @@ const fileUpload = (destiny, isUpdate = false) => {
         ...fields,
       };
 
-      if (!files.image && !isUpdate) {
+      if ((!files.image || files.image.name === "") && !isUpdate) {
         return res.status(400).send({
           message: "nao foi possivel realizar a operacao",
           details: ["imagem e obrigatoria"],
@@ -28,23 +26,12 @@ const fileUpload = (destiny, isUpdate = false) => {
         const newPath = fileUtils.createAddress(destiny, newName);
         req.body.image = {
           type: files.image.type,
-          originalName: files.image.name,
-          originalPath: files.image.path,
+          originName: files.image.name,
+          originPath: files.image.path,
           newName,
           newPath,
         };
       }
-
-      // req.body = {
-      //   ...fields,
-      //   image: {
-      //     type: files.image.type,
-      //     originalName: files.image.name,
-      //     originalPath: files.image.path,
-      //     newName,
-      //     newPath,
-      //   },
-      // };
       return next();
     });
   };

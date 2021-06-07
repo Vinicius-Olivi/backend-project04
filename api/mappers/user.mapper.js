@@ -3,6 +3,12 @@ const setUserType = (type) => {
     case "admin":
       return 1;
 
+    case "supplier":
+      return 2;
+
+    case "client":
+      return 3;
+
     default:
       break;
   }

@@ -45,7 +45,23 @@ const category = mongoose.model(
   "category",
   createSchema(undefined, categorySchema, {
     collection: " CategoryCollection",
+    toJSON: {
+      virtuals: true,
+    },
   }),
 );
 
-module.exports = { user, admin, supplier, category };
+// PRODUCT
+
+const productSchema = require("./product");
+const product = mongoose.model(
+  "product",
+  createSchema(undefined, productSchema, {
+    collection: "ProductColletion",
+    toJSON: {
+      virtuals: true,
+    },
+  }),
+);
+
+module.exports = { user, admin, supplier, category, product };

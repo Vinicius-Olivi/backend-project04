@@ -3,6 +3,7 @@ const { ifEmailExist } = require("../services/user.service");
 const { toListItemDTO } = require("../mappers/supplier.mapper");
 const { createHash } = require("../utils/crypto.utils");
 const emailUtils = require("../utils/email");
+const productMapper = require("../mappers/product.mapper");
 
 const ifCrnExist = async (crn) => {
   const result = await supplier.find({
@@ -32,7 +33,7 @@ const statusUpdate = async (id, status) => {
   if (status === "Active") {
     emailUtils.sendMessage({
       receiver: supplierDB.email,
-      sender: process.env.SENDER,
+      sender: process.env.SENDGRID_SENDER,
       subject: `Confirmacao do cadastro de ${supplierDB.fantasyName}`,
       body: `acesso liberado`,
     });
@@ -87,4 +88,18 @@ const listAll = async (filter) => {
     return toListItemDTO(item);
   });
 };
-module.exports = { create, statusUpdate, listAll };
+
+const listProductsBySupplier = async (supplierid, supplierOnId) => {
+  const supplierFromDB = await supplier
+    .findById(supplierid)
+    .populate("products");
+
+  console.log(JSON.stringify(supplierFromDB.products));
+
+  const supplierAsJSON = supplierFromDB.remove.toJSON();
+
+  return supplierAsJSON.products.map((item) => {
+    return productMapper.toItemListDTO(item);
+  });
+};
+module.exports = { create, statusUpdate, listAll, listProductsBySupplier };
