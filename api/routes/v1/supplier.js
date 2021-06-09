@@ -89,7 +89,7 @@ module.exports = (router) => {
       supplierController.seacrhProductsBySupplier,
     )
     .post(
-      fileUploadMiddleware("products"),
+      // fileUploadMiddleware("products"),
       ValidateDTO("params", {
         supplierid: Joi.string()
           .regex(/^[0-9a-fA-F]{24}$/)

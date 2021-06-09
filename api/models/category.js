@@ -16,7 +16,7 @@ module.exports = {
   },
   //origin
   image: {
-    originName: {
+    originalName: {
       type: String,
       required: false,
     },

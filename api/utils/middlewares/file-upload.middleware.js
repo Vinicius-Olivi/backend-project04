@@ -26,8 +26,8 @@ const fileUpload = (destiny, isUpdate = false) => {
         const newPath = fileUtils.createAddress(destiny, newName);
         req.body.image = {
           type: files.image.type,
-          originName: files.image.name,
-          originPath: files.image.path,
+          originalName: files.image.name,
+          originalPath: files.image.path,
           newName,
           newPath,
         };

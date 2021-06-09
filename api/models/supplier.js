@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const supplierService = {
+const supplierSchema = {
   crn: {
     type: String,
     required: true,
@@ -38,4 +38,4 @@ const supplierService = {
   ],
 };
 
-module.exports = supplierService;
+module.exports = supplierSchema;

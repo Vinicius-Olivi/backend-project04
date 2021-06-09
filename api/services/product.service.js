@@ -3,32 +3,64 @@ const fileUtils = require("../utils/file.utils");
 const productMapper = require("../mappers/product.mapper");
 
 const create = async (model) => {
+  const [categoryDB, supplierDB] = await Promise.all([
+    category.findById(model.categoryid),
+    supplier.findById(model.supplierid),
+  ]);
+
+  if (!supplierDB) {
+    return {
+      success: false,
+      message: "operação não pode ser realizada",
+      details: [
+        "Não existe fornecedor cadastrado para o supplier id informado",
+      ],
+    };
+  }
+
+  if (!categoryDB) {
+    return {
+      success: false,
+      message: "operação não pode ser realizada",
+      details: [
+        "Não existe fornecedor cadastrado para o category id informado",
+      ],
+    };
+  }
+  console.log("~~~~~~", supplierDB);
+
   const newProduct = await product.create({
     name: model.name,
     description: model.description,
     price: model.price,
     category: model.categoryid,
     supplier: model.supplierid,
-    image: {
-      originName: model.image.originName,
-      name: model.image.newName,
-      type: model.image.type,
-    },
+    // image: {
+    //   originalName: model.image.originalName,
+    //   name: model.image.newName,
+    //   type: model.image.type,
+    // },
   });
 
-  await category.findByIdAndUpdate(
-    model.categoryid,
-    { $push: { products: newProduct._id } },
-    { new: true, useFindAndModify: false },
-  );
+  categoryDB.products = [...categoryDB.products, newProduct._id];
 
-  await supplier.findByIdAndUpdate(
-    model.categoryid,
-    { $push: { products: newProduct._id } },
-    { new: true, useFindAndModify: false },
-  );
+  supplierDB.products = [...supplierDB.products, newProduct._id];
 
-  fileUtils.move(model.image.originalPath, model.image.newPath);
+  await Promise.all([categoryDB.save(), supplierDB.save()]);
+
+  // await category.findByIdAndUpdate(
+  //   model.categoryid,
+  //   { $push: { products: newProduct._id } },
+  //   { new: true, useFindAndModify: false },
+  // );
+
+  // await supplier.findByIdAndUpdate(
+  //   model.categoryid,
+  //   { $push: { products: newProduct._id } },
+  //   { new: true, useFindAndModify: false },
+  // );
+
+  // fileUtils.move(model.image.originalPath, model.image.newPath);
 
   return {
     success: true,

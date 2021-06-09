@@ -35,7 +35,7 @@ module.exports = (router) => {
   router
     .route("/category/:categoryid")
     .get(
-      ValidateDTO("param", {
+      ValidateDTO("params", {
         categoryid: Joi.string()
           .regex(/^[0-9a-fA-F]{24}$/)
           .required()
@@ -47,20 +47,20 @@ module.exports = (router) => {
       categoryController.searchById,
     )
     .delete(
-      ValidateDTO("param", {
+      ValidateDTO("params", {
         categoryid: Joi.string()
-          .regex(/^[0-9a-fA-F]{24}$/)
+          // .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
             "any.required": "categoryid eh um campo obrigatorio",
             "string.empty": "categoryid nao deve ser vazio",
-            "string.regex": `"categoria id" fora do formato experado`,
+            // "string.regex": `"categoria id" fora do formato experado`,
           }),
       }),
       categoryController.exclude,
     )
     .put(
-      fileUploadMiddleware("categories", true),
+      // fileUploadMiddleware("categories", true),
       ValidateDTO("params", {
         categoryid: Joi.string()
           .regex(/^[0-9a-fA-F]{24}$/)
