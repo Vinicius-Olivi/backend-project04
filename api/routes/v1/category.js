@@ -2,12 +2,14 @@ const Joi = require("joi");
 const ValidateDTO = require("../../utils/middlewares/validate-dto.middleware");
 const fileUploadMiddleware = require("../../utils/middlewares/file-upload.middleware");
 const categoryController = require("../../controllers/category.controller");
+const authorizeMiddleware = require("../../utils/middlewares/authorization.middleware");
 
 module.exports = (router) => {
   router
     .route("/category")
-    .get(categoryController.list)
+    .get(authorizeMiddleware("SEARCH_CATEGORY"), categoryController.list)
     .post(
+      authorizeMiddleware("CREATE_CATEGORY"),
       fileUploadMiddleware("categories"),
       ValidateDTO(
         "body",
@@ -35,6 +37,7 @@ module.exports = (router) => {
   router
     .route("/category/:categoryid")
     .get(
+      authorizeMiddleware("SEARCH_CATEGORY"),
       ValidateDTO("params", {
         categoryid: Joi.string()
           .regex(/^[0-9a-fA-F]{24}$/)
@@ -47,6 +50,7 @@ module.exports = (router) => {
       categoryController.searchById,
     )
     .delete(
+      authorizeMiddleware("DELETE_CATEGORY"),
       ValidateDTO("params", {
         categoryid: Joi.string()
           // .regex(/^[0-9a-fA-F]{24}$/)
@@ -60,6 +64,7 @@ module.exports = (router) => {
       categoryController.exclude,
     )
     .put(
+      authorizeMiddleware("UPDATE_CATEGORY"),
       // fileUploadMiddleware("categories", true),
       ValidateDTO("params", {
         categoryid: Joi.string()

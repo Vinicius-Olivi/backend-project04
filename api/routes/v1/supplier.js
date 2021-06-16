@@ -3,11 +3,12 @@ const supplierController = require("../../controllers/supplier.controller");
 const productController = require("../../controllers/product.controller");
 const ValidateDTO = require("../../utils/middlewares/validate-dto.middleware");
 const fileUploadMiddleware = require("../../utils/middlewares/file-upload.middleware");
+const authorizeMiddleware = require("../../utils/middlewares/authorization.middleware");
 
 module.exports = (router) => {
   router
     .route("/supplier")
-    .get(supplierController.list)
+    .get(authorizeMiddleware("SEARCH_SUPPLIER"), supplierController.list)
     .post(
       ValidateDTO("body", {
         crn: Joi.string().required().messages({
@@ -46,7 +47,53 @@ module.exports = (router) => {
       supplierController.create,
     );
 
+  router.route("/supplier/supplierid").get(
+    //authorizeMiddleware('SEARCH_SUPPLIER'),
+    ValidateDTO("params", {
+      supplierid: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          "any.required": `"supplier id" é um campo obrigatório`,
+          "string.empty": `"supplier id" não deve ser vazio`,
+          "string.pattern.base": `"supplier id" fora do formato experado`,
+        }),
+    }),
+    supplierController.searchById,
+  );
+
+  router
+    .route("/supplier/supplierid/likes")
+    .get(
+      //authorizeMiddleware('SEARCH_SUPPLIER'),
+      ValidateDTO("params", {
+        supplierid: Joi.string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            "any.required": `"supplier id" é um campo obrigatório`,
+            "string.empty": `"supplier id" não deve ser vazio`,
+            "string.pattern.base": `"supplier id" fora do formato experado`,
+          }),
+      }),
+      supplierController.likesReceived,
+    )
+    .post(
+      ValidateDTO("params", {
+        supplierid: Joi.string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            "any.required": `"supplier id" é um campo obrigatório`,
+            "string.empty": `"supplier id" não deve ser vazio`,
+            "string.pattern.base": `"supplier id" fora do formato experado`,
+          }),
+      }),
+      supplierController.receiveLikes,
+    );
+
   router.route("/supplier/:supplierid/activate").put(
+    authorizeMiddleware("ACTIVATE_SUPPLIER"),
     ValidateDTO("params", {
       supplierid: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -59,7 +106,9 @@ module.exports = (router) => {
     }),
     supplierController.activate,
   );
+
   router.route("/supplier/:supplierid/inactivate").put(
+    authorizeMiddleware("INACTIVATE_SUPPLIER"),
     ValidateDTO("params", {
       supplierid: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -76,6 +125,7 @@ module.exports = (router) => {
   router
     .route("/supplier/:supplierid/product")
     .get(
+      authorizeMiddleware("SEARCH_SUPPLIER_PRODUCT"),
       ValidateDTO("params", {
         supplierid: Joi.string()
           .regex(/^[0-9a-fA-F]{24}$/)
@@ -89,6 +139,7 @@ module.exports = (router) => {
       supplierController.seacrhProductsBySupplier,
     )
     .post(
+      authorizeMiddleware("CREATE_PRODUCT"),
       // fileUploadMiddleware("products"),
       ValidateDTO("params", {
         supplierid: Joi.string()
@@ -129,4 +180,27 @@ module.exports = (router) => {
       ),
       productController.create,
     );
+
+  router.route("/supplier/:supplierid/product/:productid").delete(
+    authorizeMiddleware("REMOVE_PRODUCT"),
+    ValidateDTO("params", {
+      supplierid: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          "any.required": `"supplier id" é um campo obrigatório`,
+          "string.empty": `"supplier id" não deve ser vazio`,
+          "string.pattern.base": `"supplier id" fora do formato experado`,
+        }),
+      productid: Joi.string()
+        .regex(/^[0-9a-fA-F]{24}$/)
+        .required()
+        .messages({
+          "any.required": `"supplier id" é um campo obrigatório`,
+          "string.empty": `"supplier id" não deve ser vazio`,
+          "string.pattern.base": `"supplier id" fora do formato experado`,
+        }),
+    }),
+    productController.remove,
+  );
 };

@@ -17,7 +17,7 @@ const fileUpload = (destiny, isUpdate = false) => {
       if ((!files.image || files.image.name === "") && !isUpdate) {
         return res.status(400).send({
           message: "nao foi possivel realizar a operacao",
-          details: ["imagem e obrigatoria"],
+          details: ["image e obrigatoria"],
         });
       }
 

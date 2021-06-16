@@ -64,4 +64,11 @@ const product = mongoose.model(
   }),
 );
 
-module.exports = { user, admin, supplier, category, product };
+//## CLIENT
+const clientSchema = require("./client.js.JS");
+const client = user.discriminator(
+  "client",
+  createSchema(userSchema, clientSchema, {}),
+);
+
+module.exports = { user, admin, supplier, category, product, client };

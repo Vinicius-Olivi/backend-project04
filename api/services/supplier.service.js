@@ -1,6 +1,6 @@
 const { supplier } = require("../models/index");
 const { ifEmailExist } = require("../services/user.service");
-const { toListItemDTO } = require("../mappers/supplier.mapper");
+const { toListItemDTO, toDTO } = require("../mappers/supplier.mapper");
 const { createHash } = require("../utils/crypto.utils");
 const emailUtils = require("../utils/email");
 const productMapper = require("../mappers/product.mapper");
@@ -85,7 +85,7 @@ const listAll = async (filter) => {
   const resultDB = await supplier.find();
 
   return resultDB.map((item) => {
-    return toListItemDTO(item);
+    return toDTO(item.toJSON());
   });
 };
 
@@ -94,12 +94,13 @@ const listProductsBySupplier = async (supplierid, supplierOnId) => {
     .findById(supplierid)
     .populate("products");
 
-  console.log(JSON.stringify(supplierFromDB.products));
+  // console.log(JSON.stringify(supplierFromDB.products));
 
-  const supplierAsJSON = supplierFromDB.remove.toJSON();
+  const supplierAsJSON = supplierFromDB.toJSON();
 
   return supplierAsJSON.products.map((item) => {
     return productMapper.toItemListDTO(item);
   });
 };
+
 module.exports = { create, statusUpdate, listAll, listProductsBySupplier };

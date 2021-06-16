@@ -2,6 +2,8 @@ const Joi = require("joi");
 
 const ValidateDTO = (type, params, options = {}) => {
   return (req, res, next) => {
+    console.log("####DTOType", type);
+
     const schema = Joi.object().keys(params);
 
     const result = schema.validate(req[type], {

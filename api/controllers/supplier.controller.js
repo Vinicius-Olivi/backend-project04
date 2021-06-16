@@ -71,10 +71,51 @@ const seacrhProductsBySupplier = async (req, res, next) => {
   });
 };
 
+const searchById = async (req, res, next) => {
+
+  return res.status(200).send({
+  })
+
+}
+
+const searchLikesReceived = async (req, res, next) => {
+
+  return res.status(200).send({
+    data: []
+  })
+
+}
+
+const likesReceived = async (req, res, next) => {
+
+  return res.status(200).send({
+    data: []
+  })
+
+}
+
+const receiveLikes = async (req, res, next) => {
+
+  const { body } = req;
+
+  console.log(body);
+
+  return res.status(200).send({
+    data: {
+
+    }
+  });
+
+}
 module.exports = {
   create,
   list,
   activate,
   inactivate,
   seacrhProductsBySupplier,
+  searchById,
+  searchLikesReceived,
+  likesReceived,
+  receiveLikes 
+
 };

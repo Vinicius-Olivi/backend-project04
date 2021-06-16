@@ -9,7 +9,12 @@ const toListItemDTO = (model) => {
 };
 
 const toDTO = (model) => {
-  return {};
+
+  const { _id, password, createdAt, updatedAt,  __v, kind, products, ...rest } = model
+  return {
+    id: _id,
+    ...rest
+  };
 };
 
 module.exports = {

@@ -48,19 +48,7 @@ const create = async (model) => {
 
   await Promise.all([categoryDB.save(), supplierDB.save()]);
 
-  // await category.findByIdAndUpdate(
-  //   model.categoryid,
-  //   { $push: { products: newProduct._id } },
-  //   { new: true, useFindAndModify: false },
-  // );
-
-  // await supplier.findByIdAndUpdate(
-  //   model.categoryid,
-  //   { $push: { products: newProduct._id } },
-  //   { new: true, useFindAndModify: false },
-  // );
-
-  // fileUtils.move(model.image.originalPath, model.image.newPath);
+  fileUtils.move(model.image.originalPath, model.image.newPath);
 
   return {
     success: true,
@@ -90,7 +78,74 @@ const searchByFilters = async (filters) => {
   });
 };
 
+const exclude = async ({ supplierId, productId, userId }) => {
+  const [supplierDB, productDB] = await Promise.all([
+    supplier.findById(supplierId),
+    product.findById(productId),
+  ]);
+
+  // supplier existe
+  if (!supplierDB) {
+    return {
+      success: false,
+      message: "operação não pode ser realizada",
+      details: ["O supplier informado não existe."],
+    };
+  }
+
+  if (supplierId !== userId) {
+    return {
+      success: false,
+      message: "operação não pode ser realizada",
+      details: ["O product a ser excluido não pertence ao fornecedor."],
+    };
+  }
+
+  if (!productDB) {
+    return {
+      success: false,
+      message: "operação não pode ser realizada",
+      details: ["O product informado não existe."],
+    };
+  }
+  console.log(productDB.supplier.toString());
+
+  if (productDB.supplier.toString() !== supplierId) {
+    return {
+      success: false,
+      message: "operação não pode ser realizada",
+      details: ["O supplier informado e inválido."],
+    };
+  }
+
+  const categoryDB = await category.findById(productDB.category);
+  categoryDB.products = categoryDB.products.filter((item) => {
+    return item.toString() !== productId;
+  });
+  supplierDB.products = supplierDB.products.filter((item) => {
+    return item.toString() !== productId;
+  });
+  await Promise.all([
+    categoryDB.save(),
+    supplierDB.save(),
+    product.deleteOne(productDB),
+  ]);
+
+  const { image } = productDB;
+  fileUtils.remove("products", image.name);
+
+  return {
+    success: true,
+    message: "operação realizada com sucesso",
+    data: {
+      id: productId,
+      name: productDB.name,
+    },
+  };
+};
+
 module.exports = {
   create,
   searchByFilters,
+  exclude,
 };

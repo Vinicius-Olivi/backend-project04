@@ -29,7 +29,30 @@ const list = async (req, res, next) => {
   });
 };
 
+const remove = async (req, res, next) => {
+  const { supplierid, productid } = req.params;
+  console.log(req.params);
+  console.log(req.user);
+
+  const serviceResult = await productService.exclude({
+    supplierId: supplierid,
+    productId: productid,
+    userId: req.user.id,
+  });
+
+  const resultReturn = serviceResult.success ? 200 : 400;
+  const returnData = serviceResult.success
+    ? {
+        message: serviceResult.mesage,
+        data: serviceResult.data,
+      }
+    : { details: serviceResult.details };
+
+  return res.status(resultReturn).send(returnData);
+};
+
 module.exports = {
   create,
   list,
+  remove,
 };
