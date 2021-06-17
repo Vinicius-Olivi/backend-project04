@@ -20,7 +20,7 @@ module.exports = (app) => {
   routesV1Supplier(routesV1);
   routesV1Client(routesV1);
   routesV1Product(routesV1);
-  // routesV1Upload(routesV1);
+  routesV1Upload(routesV1);
 
   app.use("/v1", routesV1);
 };
