@@ -1,14 +1,18 @@
 const Joi = require("Joi");
+const ValidateDTO = require("../../utils/middlewares/validate-dto.middleware");
 const supplierController = require("../../controllers/supplier.controller");
 const productController = require("../../controllers/product.controller");
-const ValidateDTO = require("../../utils/middlewares/validate-dto.middleware");
+
 const fileUploadMiddleware = require("../../utils/middlewares/file-upload.middleware");
 const authorizeMiddleware = require("../../utils/middlewares/authorization.middleware");
 
 module.exports = (router) => {
   router
     .route("/supplier")
-    .get(authorizeMiddleware("SEARCH_SUPPLIER"), supplierController.list)
+    .get(
+      // authorizeMiddleware("SEARCH_SUPPLIER"),
+      supplierController.list,
+    )
     .post(
       ValidateDTO("body", {
         crn: Joi.string().required().messages({
@@ -47,8 +51,8 @@ module.exports = (router) => {
       supplierController.create,
     );
 
-  router.route("/supplier/supplierid").get(
-    //authorizeMiddleware('SEARCH_SUPPLIER'),
+  router.route("/supplier/:supplierid").get(
+    authorizeMiddleware("SEARCH_SUPPLIER"),
     ValidateDTO("params", {
       supplierid: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -63,7 +67,7 @@ module.exports = (router) => {
   );
 
   router
-    .route("/supplier/supplierid/likes")
+    .route("/supplier/:supplierid/likes")
     .get(
       //authorizeMiddleware('SEARCH_SUPPLIER'),
       ValidateDTO("params", {
@@ -79,6 +83,7 @@ module.exports = (router) => {
       supplierController.likesReceived,
     )
     .post(
+      authorizeMiddleware("CREATE_LIKE"),
       ValidateDTO("params", {
         supplierid: Joi.string()
           .regex(/^[0-9a-fA-F]{24}$/)

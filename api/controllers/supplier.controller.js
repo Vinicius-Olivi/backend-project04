@@ -1,4 +1,5 @@
 const supplierService = require("../services/supplier.service");
+const likeService = require("../services/like.service");
 
 const activate = async (req, res, next) => {
   const { supplierid } = req.params;
@@ -72,41 +73,47 @@ const seacrhProductsBySupplier = async (req, res, next) => {
 };
 
 const searchById = async (req, res, next) => {
+  const { supplierid } = req.params;
+  const { id, userType } = req.user;
 
-  return res.status(200).send({
-  })
-
-}
-
-const searchLikesReceived = async (req, res, next) => {
-
-  return res.status(200).send({
-    data: []
-  })
-
-}
-
-const likesReceived = async (req, res, next) => {
-
-  return res.status(200).send({
-    data: []
-  })
-
-}
-
-const receiveLikes = async (req, res, next) => {
-
-  const { body } = req;
-
-  console.log(body);
-
-  return res.status(200).send({
-    data: {
-
-    }
+  const result = await supplierService.searchById(supplierid, {
+    id,
+    type: userType,
   });
 
-}
+  const resultReturn = result.success ? 200 : 400;
+  const returnData = result.success
+    ? { data: result.data }
+    : { details: result.details };
+
+  return res.status(resultReturn).send(returnData);
+};
+
+const searchLikesReceived = async (req, res, next) => {
+  return res.status(200).send({
+    data: [],
+  });
+};
+
+const likesReceived = async (req, res, next) => {
+  return res.status(200).send({
+    data: [],
+  });
+};
+
+const receiveLikes = async (req, res, next) => {
+  const { params, user } = req;
+
+  const result = await likeService.create(params.supplierid, user.id);
+
+  const resultReturn = result.success ? 200 : 400;
+  const returnData = result.success
+    ? { data: result.data }
+    : { details: result.details };
+
+  return res.status(resultReturn).send(returnData);
+};
+
 module.exports = {
   create,
   list,
@@ -116,6 +123,5 @@ module.exports = {
   searchById,
   searchLikesReceived,
   likesReceived,
-  receiveLikes 
-
+  receiveLikes,
 };

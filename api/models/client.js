@@ -26,6 +26,12 @@ const clientSchema = {
     type: String,
     required: true,
   },
+  likes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "like",
+    },
+  ],
 };
 
 module.exports = clientSchema;

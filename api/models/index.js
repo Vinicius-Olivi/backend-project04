@@ -30,7 +30,7 @@ const admin = user.discriminator(
   createSchema(userSchema, adminSchema, {}),
 );
 
-// supplier
+// SUPPLIER
 
 const supplierSchema = require("./supplier");
 const supplier = user.discriminator(
@@ -65,10 +65,22 @@ const product = mongoose.model(
 );
 
 //## CLIENT
-const clientSchema = require("./client.js.JS");
+const clientSchema = require("./client.js");
 const client = user.discriminator(
   "client",
   createSchema(userSchema, clientSchema, {}),
 );
 
-module.exports = { user, admin, supplier, category, product, client };
+//LIKES
+const likeSchema = require("./like");
+const like = mongoose.model(
+  "like",
+  createSchema(undefined, likeSchema, {
+    collection: "likeColletion",
+    toJSON: {
+      virtuals: true,
+    },
+  }),
+);
+
+module.exports = { user, admin, supplier, category, product, client, like };

@@ -7,7 +7,10 @@ const authorizeMiddleware = require("../../utils/middlewares/authorization.middl
 module.exports = (router) => {
   router
     .route("/category")
-    .get(authorizeMiddleware("SEARCH_CATEGORY"), categoryController.list)
+    .get(
+      // authorizeMiddleware("SEARCH_CATEGORY"),
+      categoryController.list,
+    )
     .post(
       authorizeMiddleware("CREATE_CATEGORY"),
       fileUploadMiddleware("categories"),

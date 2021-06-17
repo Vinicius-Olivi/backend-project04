@@ -36,6 +36,13 @@ const supplierSchema = {
       ref: "product",
     },
   ],
+
+  likes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "like",
+    },
+  ],
 };
 
 module.exports = supplierSchema;

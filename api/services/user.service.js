@@ -33,7 +33,7 @@ const profiles = [
   {
     id: "3",
     description: "client",
-    functionalities: [],
+    functionalities: ["CREATE_LIKE"],
   },
 ];
 
@@ -99,9 +99,16 @@ const functionalitiesProfileValidate = (profileId, functionalities) => {
   return perfil.functionalities.includes(functionalities);
 };
 
+const searchUserTypeById = (userTypeId) => {
+  return profiles.find((item) => {
+    return item.id === userTypeId;
+  });
+};
+
 module.exports = {
   authenticate,
   create,
   ifEmailExist,
   functionalitiesProfileValidate,
+  searchUserTypeById,
 };

@@ -1,5 +1,8 @@
 const { supplier } = require("../models/index");
-const { ifEmailExist } = require("../services/user.service");
+const {
+  ifEmailExist,
+  searchUserTypeById,
+} = require("../services/user.service");
 const { toListItemDTO, toDTO } = require("../mappers/supplier.mapper");
 const { createHash } = require("../utils/crypto.utils");
 const emailUtils = require("../utils/email");
@@ -20,9 +23,7 @@ const statusUpdate = async (id, status) => {
     return {
       success: false,
       message: "operacao nao pode ser realizada",
-      details: [
-        "Nao existe fornecedor cadastrado para o fornecedor id informado",
-      ],
+      details: ["Nao existe supplier cadastrado para o supplier id informado"],
     };
   }
 
@@ -54,7 +55,7 @@ const create = async (model) => {
     return {
       success: false,
       message: "operacao nao pode ser realizada",
-      details: ["ja existe fornecedor cadastrado"],
+      details: ["ja existe supplier cadastrado"],
     };
 
   if (await ifEmailExist(email))
@@ -103,4 +104,39 @@ const listProductsBySupplier = async (supplierid, supplierOnId) => {
   });
 };
 
-module.exports = { create, statusUpdate, listAll, listProductsBySupplier };
+const searchById = async (supplierid, { id, type }) => {
+  const supplierDB = await supplier.findById(supplierid);
+
+  if (!supplierDB) {
+    return {
+      success: false,
+      message: "operação não pode ser realizada",
+      details: ["o supplier pesquisado não existe"],
+    };
+  }
+
+  const userType = searchUserTypeById(type);
+
+  if (userType.description === "supplier") {
+    if (supplierid !== id) {
+      return {
+        success: false,
+        message: "operação não pode ser realizada",
+        details: ["o user nao pode realizar essa operacao"],
+      };
+    }
+  }
+
+  return {
+    success: true,
+    data: toDTO(supplierDB.toJSON()),
+  };
+};
+
+module.exports = {
+  create,
+  statusUpdate,
+  listAll,
+  listProductsBySupplier,
+  searchById,
+};
