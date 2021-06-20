@@ -17,7 +17,6 @@ app.use(express.json());
 app.use("/static", express.static(__dirname + "/.." + "/files"));
 
 const router = require("./routes/index");
-
 router(app);
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3001;

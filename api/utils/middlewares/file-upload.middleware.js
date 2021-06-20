@@ -21,7 +21,7 @@ const fileUpload = (destiny, isUpdate = false) => {
         });
       }
 
-      if (files.image) {
+      if (files.image && files.image.name !== "") {
         const newName = fileUtils.createName(files.image.type);
         const newPath = fileUtils.createAddress(destiny, newName);
         req.body.image = {

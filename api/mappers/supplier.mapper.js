@@ -9,11 +9,18 @@ const toListItemDTO = (model) => {
 };
 
 const toDTO = (model) => {
-
-  const { _id, password, createdAt, updatedAt,  __v, kind, products, ...rest } = model
+  const { _id, password, createdAt, updatedAt, __v, kind, products, ...rest } =
+    model;
   return {
     id: _id,
-    ...rest
+    likes: likes.map((item) => {
+      return {
+        id: item._id,
+        clientId: item.client._id,
+        clientName: item.client.name,
+      };
+    }),
+    // ...rest
   };
 };
 

@@ -15,7 +15,8 @@ const profiles = [
       "SEARCH_SUPPLIER_ID",
       "ACTIVATE_SUPPLIER",
       "INACTIVATE_SUPPLIER",
-      "SEARCH_SUPPLIER_PRODUTO",
+      "SEARCH_SUPPLIER_PRODUCT",
+      "DELETE_CATEGORY",
     ],
   },
   {
@@ -26,8 +27,8 @@ const profiles = [
       "SEARCH_SUPPLIER_ID",
       "SEARCH_PRODUCT",
       "CREATE_PRODUCT",
-      "REMOVE_PRODUTO",
-      "SEARCH_SUPPLIER_PRODUTO",
+      "REMOVE_PRODUCT",
+      "SEARCH_SUPPLIER_PRODUCT",
     ],
   },
   {
@@ -52,7 +53,7 @@ const userValid = async (email, password) => {
     : false;
 };
 
-const credencialCreate = async (userEmail) => {
+const credentialCreate = async (userEmail) => {
   const userDB = await user.findOne({
     email: userEmail,
   });
@@ -78,7 +79,7 @@ const authenticate = async (email, password) => {
   return {
     success: true,
     message: "user authenticated !",
-    data: await credencialCreate(email),
+    data: await credentialCreate(email),
   };
 };
 

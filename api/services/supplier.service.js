@@ -36,7 +36,7 @@ const statusUpdate = async (id, status) => {
       receiver: supplierDB.email,
       sender: process.env.SENDGRID_SENDER,
       subject: `Confirmacao do cadastro de ${supplierDB.fantasyName}`,
-      body: `acesso liberado`,
+      body: `acesso ao project 4liberado`,
     });
   }
   return {
@@ -83,7 +83,14 @@ const create = async (model) => {
 };
 
 const listAll = async (filter) => {
-  const resultDB = await supplier.find();
+  const resultDB = await supplier.find({}).populate({
+    path: "likes",
+    model: "like",
+    populate: {
+      path: "client",
+      model: "client",
+    },
+  });
 
   return resultDB.map((item) => {
     return toDTO(item.toJSON());
