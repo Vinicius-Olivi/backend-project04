@@ -10,7 +10,7 @@ module.exports = (router) => {
   router
     .route("/supplier")
     .get(
-      // authorizeMiddleware("SEARCH_SUPPLIER"),
+      // authorizeMiddleware("*"),
       supplierController.list,
     )
     .post(
@@ -52,7 +52,7 @@ module.exports = (router) => {
     );
 
   router.route("/supplier/:supplierid").get(
-    authorizeMiddleware("SEARCH_SUPPLIER"),
+    authorizeMiddleware("SEARCH_SUPPLIER_ID"),
     ValidateDTO("params", {
       supplierid: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -60,7 +60,7 @@ module.exports = (router) => {
         .messages({
           "any.required": `"supplier id" é um campo obrigatório`,
           "string.empty": `"supplier id" não deve ser vazio`,
-          "string.pattern.base": `"supplier id" fora do formato experado`,
+          "string.pattern.base": `"supplier id" fora do formato esperado`,
         }),
     }),
     supplierController.searchById,
@@ -77,7 +77,7 @@ module.exports = (router) => {
           .messages({
             "any.required": `"supplier id" é um campo obrigatório`,
             "string.empty": `"supplier id" não deve ser vazio`,
-            "string.pattern.base": `"supplier id" fora do formato experado`,
+            "string.pattern.base": `"supplier id" fora do formato esperado`,
           }),
       }),
       supplierController.likesReceived,
@@ -91,10 +91,25 @@ module.exports = (router) => {
           .messages({
             "any.required": `"supplier id" é um campo obrigatório`,
             "string.empty": `"supplier id" não deve ser vazio`,
-            "string.pattern.base": `"supplier id" fora do formato experado`,
+            "string.pattern.base": `"supplier id" fora do formato esperado`,
           }),
       }),
       supplierController.receiveLikes,
+    )
+
+    .delete(
+      authorizeMiddleware("DELETE_LIKE"),
+      ValidateDTO("params", {
+        supplierid: Joi.string()
+          .regex(/^[0-9a-fA-F]{24}$/)
+          .required()
+          .messages({
+            "any.required": `"supplier id" é um campo obrigatório`,
+            "string.empty": `"supplier id" não deve ser vazio`,
+            "string.pattern.base": `"supplier id" fora do formato esperado`,
+          }),
+      }),
+      supplierController.likesDelete,
     );
 
   router.route("/supplier/:supplierid/activate").put(
@@ -106,7 +121,7 @@ module.exports = (router) => {
         .messages({
           "any.required": `"supplier id " é um campo obrigatório`,
           "string.empty": `"supplier id " não deve ser vazio`,
-          "string.pattern.base": `"supplier id " fora do formato experado`,
+          "string.pattern.base": `"supplier id " fora do formato esperado`,
         }),
     }),
     supplierController.activate,
@@ -121,7 +136,7 @@ module.exports = (router) => {
         .messages({
           "any.required": `"supplier id " é um campo obrigatório`,
           "string.empty": `"supplier id " não deve ser vazio`,
-          "string.pattern.base": `"supplier id " fora do formato experado`,
+          "string.pattern.base": `"supplier id " fora do formato esperado`,
         }),
     }),
     supplierController.inactivate,
@@ -138,10 +153,10 @@ module.exports = (router) => {
           .messages({
             "any.required": `"supplier id" é um campo obrigatório`,
             "string.empty": `"supplier id" não deve ser vazio`,
-            "string.pattern.base": `"supplier id" fora do formato experado`,
+            "string.pattern.base": `"supplier id" fora do formato esperado`,
           }),
       }),
-      supplierController.seacrhProductsBySupplier,
+      supplierController.searchProductsBySupplier,
     )
     .post(
       authorizeMiddleware("CREATE_PRODUCT"),
@@ -153,7 +168,7 @@ module.exports = (router) => {
           .messages({
             "any.required": `"supplier id" é um campo obrigatório`,
             "string.empty": `"supplier id" não deve ser vazio`,
-            "string.pattern.base": `"supplier id" fora do formato experado`,
+            "string.pattern.base": `"supplier id" fora do formato esperado`,
           }),
       }),
       ValidateDTO(
@@ -173,7 +188,7 @@ module.exports = (router) => {
             .messages({
               "any.required": `"category id" é um campo obrigatório`,
               "string.empty": `"category id" não deve ser vazio`,
-              "string.pattern.base": `"category id" fora do formato experado`,
+              "string.pattern.base": `"category id" fora do formato esperado`,
             }),
           price: Joi.number().required().messages({
             "any.required": `"price" é um campo obrigatório`,
@@ -195,7 +210,7 @@ module.exports = (router) => {
         .messages({
           "any.required": `"supplier id" é um campo obrigatório`,
           "string.empty": `"supplier id" não deve ser vazio`,
-          "string.pattern.base": `"supplier id" fora do formato experado`,
+          "string.pattern.base": `"supplier id" fora do formato esperado`,
         }),
       productid: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
@@ -203,7 +218,7 @@ module.exports = (router) => {
         .messages({
           "any.required": `"supplier id" é um campo obrigatório`,
           "string.empty": `"supplier id" não deve ser vazio`,
-          "string.pattern.base": `"supplier id" fora do formato experado`,
+          "string.pattern.base": `"supplier id" fora do formato esperado`,
         }),
     }),
     productController.remove,

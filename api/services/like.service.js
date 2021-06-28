@@ -34,6 +34,51 @@ const create = async (supplierid, userid) => {
   };
 };
 
+const remove = async (supplierid, userid) => {
+  const [supplierDB, userDB, likeDB] = await Promise.all([
+    supplier.findById(supplierid),
+    client.findById(userid),
+    like.findOne({ supplier: supplierid, client: userid }),
+  ]);
+
+  if (!supplierDB) {
+    return {
+      success: false,
+      message: "operação não pode ser realizada",
+      details: ["o supplier informado não existe"],
+    };
+  }
+
+  if (!likeDB) {
+    return {
+      success: false,
+      message: "operação não pode ser realizada",
+      details: ["não existem likes para os dados informados"],
+    };
+  }
+
+  supplierDB.likes = supplierDB.likes.filter((item) => {
+    return item.toString() !== likeDB._id.toString();
+  });
+
+  const like_id = likeDB._id.toString();
+
+  userDB.likes = userDB.likes.filter((item) => {
+    return item.toString() !== likeDB._id.toString();
+  });
+
+  await Promise.all([supplierDB.save(), userDB.save(), like.remove(likeDB)]);
+
+  return {
+    success: false,
+    message: "operação realizada com success",
+    data: {
+      id: like_id,
+    },
+  };
+};
+
 module.exports = {
   create,
+  remove,
 };

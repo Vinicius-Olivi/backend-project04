@@ -49,7 +49,7 @@ const statusUpdate = async (id, status) => {
 };
 
 const create = async (model) => {
-  const { email, crn, password, ...rest } = model;
+  const { email, crn, password, ...residual } = model;
 
   if (await ifCrnExist(crn))
     return {
@@ -68,7 +68,7 @@ const create = async (model) => {
   const newSupplier = await supplier.create({
     email,
     crn,
-    ...rest,
+    ...residual,
     password: createHash(password),
     status: "Analise",
   });

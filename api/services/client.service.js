@@ -4,7 +4,7 @@ const { toListItemDTO } = require("../mappers/client.mapper");
 const { createHash } = require("../utils/crypto.utils");
 
 const create = async (model) => {
-  const { email, password, ...rest } = model;
+  const { email, password, ...residual } = model;
 
   //TODO: email ja existente
   if (await ifEmailExist(email))
@@ -16,7 +16,7 @@ const create = async (model) => {
 
   const newClient = await client.create({
     email,
-    ...rest,
+    ...residual,
     password: createHash(password),
     status: "Active",
   });

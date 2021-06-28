@@ -1,9 +1,11 @@
 const cryptoUitls = require("../crypto.utils");
 const userService = require("../../services/user.service");
 
-const authorizate = (route = "*") => {
+const authorizate = (req, res, next, route = "*") => {
+  console.log("@@@@@@@@@@@", route);
+
   return async (req, res, next) => {
-    console.log("@@@@@@@@@@@");
+    console.log("@@@@@@@@@@@", route);
 
     const { token } = req.headers;
 

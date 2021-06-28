@@ -2,8 +2,8 @@ const { category } = require("../models/index");
 const categoryMapper = require("../mappers/category.mapper");
 const fileUtils = require("../utils/file.utils");
 
-const searchById = async (categoryId) => {
-  const categoryDB = await category.findById(categoryId);
+const searchById = async (categoryid) => {
+  const categoryDB = await category.findById(categoryid);
 
   if (categoryDB) return categoryMapper.toDTO(categoryDB);
 
@@ -50,14 +50,14 @@ const exclude = async (categoryId) => {
 
   console.log(categoryDB);
 
-  const categoryDBASsJson = categoryDB.toJSON();
-  console.log(categoryDBASsJson);
+  // const categoryDBASsJson = categoryDB.toJSON();
+  // console.log(categoryDBASsJson);
 
   if (!categoryDB) {
     return {
       success: false,
       message: "nao foi possivel realizar a operacao",
-      details: ["categoria nao existe"],
+      details: ["categoryid nao existe"],
     };
   }
   console.log("#########", categoryDB);

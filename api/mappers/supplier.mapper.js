@@ -9,8 +9,17 @@ const toListItemDTO = (model) => {
 };
 
 const toDTO = (model) => {
-  const { _id, password, createdAt, updatedAt, __v, kind, products, ...rest } =
-    model;
+  const {
+    _id,
+    likes,
+    password,
+    createdAt,
+    updatedAt,
+    __v,
+    kind,
+    products,
+    ...residual
+  } = model;
   return {
     id: _id,
     likes: likes.map((item) => {
@@ -20,7 +29,7 @@ const toDTO = (model) => {
         clientName: item.client.name,
       };
     }),
-    // ...rest
+    ...residual,
   };
 };
 

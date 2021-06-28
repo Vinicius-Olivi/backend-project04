@@ -4,7 +4,7 @@ const userMapper = require("../mappers/user.mapper");
 
 const profiles = [
   {
-    id: "1",
+    id: 1,
     description: "admin",
     functionalities: [
       "UPDATE_CATEGORY",
@@ -20,7 +20,7 @@ const profiles = [
     ],
   },
   {
-    id: "2",
+    id: 2,
     description: "supplier",
     functionalities: [
       "UPDATE_SUPPLIER",
@@ -32,9 +32,9 @@ const profiles = [
     ],
   },
   {
-    id: "3",
+    id: 3,
     description: "client",
-    functionalities: ["CREATE_LIKE"],
+    functionalities: ["CREATE_LIKE", "REMOVE_LIKE"],
   },
 ];
 
@@ -66,6 +66,14 @@ const credentialCreate = async (userEmail) => {
   };
 };
 
+const userValidate = async (user) => {
+  if (!user) return false;
+
+  if (user.kind === "supplier") return user.status === "Active" ? true : false;
+
+  return true;
+};
+
 const authenticate = async (email, password) => {
   const resultDB = await userValid(email, password);
   if (!resultDB) {
@@ -75,7 +83,13 @@ const authenticate = async (email, password) => {
       details: ["invalid username or password"],
     };
   }
-
+  if (!(await userValidate(resultDB))) {
+    return {
+      success: false,
+      message: "it was not possible to authenticate the user",
+      details: ["invalid username or password"],
+    };
+  }
   return {
     success: true,
     message: "user authenticated !",
@@ -112,4 +126,5 @@ module.exports = {
   ifEmailExist,
   functionalitiesProfileValidate,
   searchUserTypeById,
+  userValidate,
 };

@@ -48,7 +48,7 @@ const create = async (model) => {
 
   await Promise.all([categoryDB.save(), supplierDB.save()]);
 
-  fileUtils.move(model.image.originalPath, model.image.newPath);
+  // fileUtils.move(model.image.originalPath, model.image.newPath);
 
   return {
     success: true,
@@ -72,7 +72,7 @@ const searchByFilters = async (filters) => {
 
   console.log("mongoFilterrrr", mongoFilter);
 
-  const resultDB = await product.find(mongoFilter);
+  const resultDB = await product.find(mongoFilter).populate("category");
   return resultDB.map((item) => {
     return productMapper.toItemListDTO(item);
   });

@@ -64,7 +64,7 @@ const list = async (req, res, next) => {
   });
 };
 
-const seacrhProductsBySupplier = async (req, res, next) => {
+const searchProductsBySupplier = async (req, res, next) => {
   const { params } = req;
   const data = await supplierService.listProductsBySupplier(params.supplierid);
   return res.status(200).send({
@@ -114,14 +114,25 @@ const receiveLikes = async (req, res, next) => {
   return res.status(resultReturn).send(returnData);
 };
 
+const likesDelete = async (req, res, next) => {
+  const { user, params } = req;
+  const result = await likeService.remove(params.supplierid, user.id);
+  const resultReturn = result.success ? 200 : 400;
+  const returnData = result.success
+    ? { data: result.data }
+    : { details: result.details };
+  return res.status(resultReturn).send(returnData);
+};
+
 module.exports = {
   create,
   list,
   activate,
   inactivate,
-  seacrhProductsBySupplier,
+  searchProductsBySupplier,
   searchById,
   searchLikesReceived,
   likesReceived,
   receiveLikes,
+  likesDelete,
 };
