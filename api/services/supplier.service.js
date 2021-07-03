@@ -36,7 +36,7 @@ const statusUpdate = async (id, status) => {
       receiver: supplierDB.email,
       sender: process.env.SENDGRID_SENDER,
       subject: `Confirmacao do cadastro de ${supplierDB.fantasyName}`,
-      body: `acesso ao project 4liberado`,
+      body: `acesso ao project 4 liberado`,
     });
   }
   return {
@@ -97,7 +97,12 @@ const listAll = async (filter) => {
   });
 };
 
-const listProductsBySupplier = async (supplierid, supplierOnId) => {
+const listProductsBySupplier = async (supplierid, fornecedorlogadoid) => {
+  if (supplierid !== fornecedorlogadoid) {
+    return {
+      message: "User nao autorizado",
+    };
+  }
   const supplierFromDB = await supplier
     .findById(supplierid)
     .populate("products");

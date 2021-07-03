@@ -10,7 +10,7 @@ module.exports = (router) => {
         "string.empty": `"name" não deve ser vazio`,
       }),
 
-      birthday: Joi.date().format("DD/MM/YYYY").required().messages({
+      birthdate: Joi.date().format("DD/MM/YYYY").required().messages({
         "any.required": `"birthday" é um campo obrigatório`,
         "date.format": `"birthday" deve ser uma data válida "{#format}"`,
       }),
@@ -19,9 +19,9 @@ module.exports = (router) => {
         "any.required": `"uf" é um campo obrigatório`,
         "string.empty": `"uf" não deve ser vazio`,
       }),
-      city: Joi.string().required().messages({
-        "any.required": `"city" é um campo obrigatório`,
-        "string.empty": `"city" não deve ser vazio`,
+      cidade: Joi.string().required().messages({
+        "any.required": `"cidade" é um campo obrigatório`,
+        "string.empty": `"cidade" não deve ser vazio`,
       }),
       email: Joi.string().email().required().messages({
         "any.required": `"email" é um campo obrigatório`,

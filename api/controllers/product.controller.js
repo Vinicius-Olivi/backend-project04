@@ -1,26 +1,22 @@
 const productService = require("../services/product.service");
 
 const create = async (req, res, next) => {
-  const { body, params } = req;
+  const { body, params, user } = req;
   const serviceResult = await productService.create({
     ...params,
     ...body,
+    fornecedorlogadoid: user.id,
   });
 
-  const resultReturn = serviceResult.success ? 200 : 400;
-
-  const returnData = serviceResult.success
-    ? {
-        data: serviceResult.data,
-      }
-    : { details: serviceResult.details };
-
-  return res.status(resultReturn).send(returnData);
+  return res.status(200).send({
+    message: "Operacao realizada com sucesso.",
+    data: serviceResult.data,
+  });
 };
 
 const list = async (req, res, next) => {
   const { query } = req;
-  console.log("@@@@@", query);
+  // console.log("@@@@@", query);
 
   const result = await productService.searchByFilters(query);
 

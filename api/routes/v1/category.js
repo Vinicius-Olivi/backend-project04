@@ -7,10 +7,7 @@ const authorizeMiddleware = require("../../utils/middlewares/authorization.middl
 module.exports = (router) => {
   router
     .route("/category")
-    .get(
-      // authorizeMiddleware("SEARCH_CATEGORY"),
-      categoryController.list,
-    )
+    .get(categoryController.list)
     .post(
       authorizeMiddleware("CREATE_CATEGORY"),
       fileUploadMiddleware("categories"),
@@ -56,19 +53,19 @@ module.exports = (router) => {
       authorizeMiddleware("DELETE_CATEGORY"),
       ValidateDTO("params", {
         categoryid: Joi.string()
-          // .regex(/^[0-9a-fA-F]{24}$/)
+          .regex(/^[0-9a-fA-F]{24}$/)
           .required()
           .messages({
             "any.required": "categoryid eh um campo obrigatorio",
             "string.empty": "categoryid nao deve ser vazio",
-            // "string.regex": `"categoria id" fora do formato experado`,
+            "string.regex": `"categoria id" fora do formato experado`,
           }),
       }),
       categoryController.exclude,
     )
     .put(
       authorizeMiddleware("UPDATE_CATEGORY"),
-      // fileUploadMiddleware("categories", true),
+      fileUploadMiddleware("categories", true),
       ValidateDTO("params", {
         categoryid: Joi.string()
           .regex(/^[0-9a-fA-F]{24}$/)

@@ -35,11 +35,11 @@ const create = async (model) => {
     price: model.price,
     category: model.categoryid,
     supplier: model.supplierid,
-    // image: {
-    //   originalName: model.image.originalName,
-    //   name: model.image.newName,
-    //   type: model.image.type,
-    // },
+    image: {
+      originalName: model.image.originalName,
+      name: model.image.newName,
+      type: model.image.type,
+    },
   });
 
   categoryDB.products = [...categoryDB.products, newProduct._id];
@@ -48,7 +48,7 @@ const create = async (model) => {
 
   await Promise.all([categoryDB.save(), supplierDB.save()]);
 
-  // fileUtils.move(model.image.originalPath, model.image.newPath);
+  fileUtils.move(model.image.originalPath, model.image.newPath);
 
   return {
     success: true,
@@ -68,8 +68,7 @@ const searchByFilters = async (filters) => {
   if (filters.supplierid) mongoFilter.supplier = filters.supplierid;
 
   if (filters.nameLike)
-    mongoFilter.name = { regex: ".*" + filters.nameLike + ".*" };
-
+    mongoFilter.name = { $regex: ".*" + filters.nameLike + ".*" };
   console.log("mongoFilterrrr", mongoFilter);
 
   const resultDB = await product.find(mongoFilter).populate("category");

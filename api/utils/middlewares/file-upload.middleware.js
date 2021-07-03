@@ -3,37 +3,70 @@ const fs = require("fs");
 const formidable = require("formidable");
 const fileUtils = require("../file.utils");
 
-//testar KEEP EXTENSION
+// const ErrorRegraDeNegocio = require('../errors/erro-regra-negocio');
+
+const postIsValid = (files) => {
+  if (!files.image || files.image.name === "") {
+    return false;
+  }
+
+  return true;
+};
+
+const putIsValid = (files) => {
+  if (!files.image || files.image.name === "") {
+    return false;
+  }
+
+  return true;
+};
+
 const fileUpload = (destiny, isUpdate = false) => {
-  const form = formidable.IncomingForm();
-  form.uploadDir = fileUtils.createAddress("temp");
+  return async (req, res, next) => {
+    const form = formidable.IncomingForm({ keepExtensions: true });
+    form.uploadDir = fileUtils.createAddress("temp");
 
-  return (req, res, next) => {
-    form.parse(req, (err, fields, files) => {
-      req.body = {
-        ...fields,
-      };
+    var formfields = await new Promise(function (resolve, reject) {
+      form.parse(req, (err, fields, files) => {
+        if (err) {
+          return reject(err);
+        }
 
-      if ((!files.image || files.image.name === "") && !isUpdate) {
+        resolve({
+          ...fields,
+          files,
+        });
+      });
+    });
+
+    const { files, ...fields } = formfields;
+
+    req.body = {
+      ...fields,
+    };
+
+    if (req.method === "POST") {
+      if (!postIsValid(files))
         return res.status(400).send({
           message: "nao foi possivel realizar a operacao",
           details: ["image e obrigatoria"],
         });
-      }
+    }
 
-      if (files.image && files.image.name !== "") {
-        const newName = fileUtils.createName(files.image.type);
-        const newPath = fileUtils.createAddress(destiny, newName);
-        req.body.image = {
-          type: files.image.type,
-          originalName: files.image.name,
-          originalPath: files.image.path,
-          newName,
-          newPath,
-        };
-      }
-      return next();
-    });
+    if (files.image && files.image.name !== "") {
+      const newName = fileUtils.createName(files.image.type);
+      const newPath = fileUtils.createAddress(destiny, newName);
+
+      req.body.image = {
+        type: files.image.type,
+        originalName: files.image.name,
+        originalPath: files.image.path,
+        newName,
+        newPath,
+      };
+    }
+
+    next();
   };
 };
 

@@ -10,7 +10,7 @@ const toItemListDTO = (model) => {
     categoryName: category.name,
     categoryId: category._id,
     price: `£ ${price.toString().replace(".", ",")}`,
-    // image: fileUtils.createDownloadAddress("products", image.name),
+    image: fileUtils.createDownloadAddress("products", image.name),
   };
 };
 

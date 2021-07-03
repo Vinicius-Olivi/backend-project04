@@ -1,11 +1,10 @@
 const cryptoUitls = require("../crypto.utils");
 const userService = require("../../services/user.service");
 
-const authorizate = (req, res, next, route = "*") => {
-  console.log("@@@@@@@@@@@", route);
-
+const authorizate = (route = "*") => {
   return async (req, res, next) => {
-    console.log("@@@@@@@@@@@", route);
+    const testRoute = route;
+    console.log(testRoute);
 
     const { token } = req.headers;
 
@@ -29,8 +28,8 @@ const authorizate = (req, res, next, route = "*") => {
     }
 
     //verificar se o user informado pussui o privilégio necessario  para executar a route.
-    if (route != "*") {
-      if (!userService.functionalitiesProfileValidate(userType, route))
+    if (testRoute != "*") {
+      if (!userService.functionalitiesProfileValidate(userType, testRoute))
         return res.status(403).send({
           message: "user não autorizado.",
         });

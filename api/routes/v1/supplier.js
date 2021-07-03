@@ -19,6 +19,10 @@ module.exports = (router) => {
           "any.required": "crn eh um campo obrigatorio",
           "string.empty": "crn nao deve ser vazio",
         }),
+        // name: Joi.string().required().messages({
+        //   "any.required": " Name eh um campo obrigatorio",
+        //   "string.empty": " Name nao deve ser vazio",
+        // }),
         fantasyName: Joi.string().required().messages({
           "any.required": "Fantasy Name eh um campo obrigatorio",
           "string.empty": "Fantasy Name nao deve ser vazio",
@@ -27,7 +31,11 @@ module.exports = (router) => {
           "any.required": "Address eh um campo obrigatorio",
           "string.empty": "Address nao deve ser vazio",
         }),
-        city: Joi.string().required().messages({
+        uf: Joi.string().required().messages({
+          "any.required": "City eh um campo obrigatorio",
+          "string.empty": "City nao deve ser vazio",
+        }),
+        cidade: Joi.string().required().messages({
           "any.required": "City eh um campo obrigatorio",
           "string.empty": "City nao deve ser vazio",
         }),
@@ -160,7 +168,7 @@ module.exports = (router) => {
     )
     .post(
       authorizeMiddleware("CREATE_PRODUCT"),
-      // fileUploadMiddleware("products"),
+      fileUploadMiddleware("products"),
       ValidateDTO("params", {
         supplierid: Joi.string()
           .regex(/^[0-9a-fA-F]{24}$/)

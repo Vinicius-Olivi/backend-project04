@@ -9,15 +9,9 @@ const activate = async (req, res, next) => {
     "Active",
   );
 
-  const resultReturn = serviceResult.success ? 200 : 400;
-
-  const returnData = serviceResult.success
-    ? {
-        data: serviceResult.data,
-      }
-    : { details: serviceResult.details };
-  return res.status(resultReturn).send({
-    ...returnData,
+  return res.status(200).send({
+    message: "operaçao realizada com sucesso",
+    data: serviceResult.data,
   });
 };
 
@@ -29,14 +23,9 @@ const inactivate = async (req, res, next) => {
     "Inactive",
   );
 
-  const resultReturn = serviceResult.success ? 200 : 400;
-  const returnData = serviceResult.success
-    ? {
-        data: serviceResult.data,
-      }
-    : { details: serviceResult.details };
-  return res.status(resultReturn).send({
-    ...returnData,
+  return res.status(200).send({
+    message: "operacao realizada com sucesso",
+    data: serviceResult.data,
   });
 };
 
@@ -65,8 +54,11 @@ const list = async (req, res, next) => {
 };
 
 const searchProductsBySupplier = async (req, res, next) => {
-  const { params } = req;
-  const data = await supplierService.listProductsBySupplier(params.supplierid);
+  const { params, user } = req;
+  const data = await supplierService.listProductsBySupplier(
+    params.supplierid,
+    user.id,
+  );
   return res.status(200).send({
     data,
   });

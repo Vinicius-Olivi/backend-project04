@@ -45,12 +45,10 @@ const ifEmailExist = async (email) => {
 };
 
 const userValid = async (email, password) => {
-  return (await user.findOne({
+  return await user.findOne({
     email,
     password: crypto.createHash(password),
-  }))
-    ? true
-    : false;
+  });
 };
 
 const credentialCreate = async (userEmail) => {

@@ -7,7 +7,7 @@ const clientSchema = {
     required: true,
   },
 
-  birthday: {
+  birthdate: {
     type: String,
     required: true,
   },
@@ -17,7 +17,7 @@ const clientSchema = {
     required: true,
   },
 
-  city: {
+  cidade: {
     type: String,
     required: true,
   },

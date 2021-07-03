@@ -6,6 +6,10 @@ const supplierSchema = {
     type: String,
     required: true,
   },
+  // name: {
+  //   type: String,
+  //   required: true,
+  // },
   fantasyName: {
     type: String,
     required: true,
@@ -14,7 +18,11 @@ const supplierSchema = {
     type: String,
     required: true,
   },
-  city: {
+  uf: {
+    type: String,
+    required: true,
+  },
+  cidade: {
     type: String,
     required: true,
   },

@@ -15,20 +15,20 @@ module.exports = {
     required: true,
   },
 
-  // image: {
-  //   originalName: {
-  //     type: String,
-  //     required: true,
-  //   },
-  //   name: {
-  //     type: String,
-  //     required: true,
-  //   },
-  //   type: {
-  //     type: String,
-  //     required: true,
-  //   },
-  // },
+  image: {
+    originalName: {
+      type: String,
+      required: false,
+    },
+    name: {
+      type: String,
+      required: false,
+    },
+    type: {
+      type: String,
+      required: false,
+    },
+  },
 
   category: {
     type: Schema.Types.ObjectId,

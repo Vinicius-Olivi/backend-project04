@@ -5,14 +5,9 @@ const auth = async (req, res, next) => {
 
   const serviceResult = await userService.authenticate(email, password);
 
-  const resultReturn = serviceResult.success ? 200 : 401;
-  const returnData = serviceResult.success
-    ? { data: serviceResult.data }
-    : { details: serviceResult.details };
-
-  return res.status(resultReturn).send({
+  return res.status(200).send({
     message: serviceResult.message,
-    ...returnData,
+    data: serviceResult.data,
   });
 };
 
