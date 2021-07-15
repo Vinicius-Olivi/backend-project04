@@ -58,7 +58,7 @@ module.exports = (router) => {
           .messages({
             "any.required": "categoryid eh um campo obrigatorio",
             "string.empty": "categoryid nao deve ser vazio",
-            "string.regex": `"categoria id" fora do formato experado`,
+            // "string.regex": `"categoria id" fora do formato esperado`,
           }),
       }),
       categoryController.exclude,
@@ -73,7 +73,7 @@ module.exports = (router) => {
           .messages({
             "any.required": `"categoria id" é um campo obrigatório`,
             "string.empty": `"categoria id" não deve ser vazio`,
-            "string.regex": `"categoria id" fora do formato experado`,
+            // "string.regex": `"categoria id" fora do formato esperado`,
           }),
       }),
       ValidateDTO(

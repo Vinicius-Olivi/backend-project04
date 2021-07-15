@@ -83,14 +83,17 @@ const create = async (model) => {
 };
 
 const listAll = async (filter) => {
-  const resultDB = await supplier.find({}).populate({
-    path: "likes",
-    model: "like",
-    populate: {
-      path: "client",
-      model: "client",
-    },
-  });
+  const resultDB = await supplier
+    .find({})
+    .sort({ fantasyName: 1 })
+    .populate({
+      path: "likes",
+      model: "like",
+      populate: {
+        path: "client",
+        model: "client",
+      },
+    });
 
   return resultDB.map((item) => {
     return toDTO(item.toJSON());
@@ -107,7 +110,7 @@ const listProductsBySupplier = async (supplierid, fornecedorlogadoid) => {
     .findById(supplierid)
     .populate("products");
 
-  // console.log(JSON.stringify(supplierFromDB.products));
+  console.log(JSON.stringify(supplierFromDB.products));
 
   const supplierAsJSON = supplierFromDB.toJSON();
 

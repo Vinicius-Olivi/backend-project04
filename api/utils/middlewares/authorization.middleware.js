@@ -4,7 +4,6 @@ const userService = require("../../services/user.service");
 const authorizate = (route = "*") => {
   return async (req, res, next) => {
     const testRoute = route;
-    console.log(testRoute);
 
     const { token } = req.headers;
 
@@ -14,7 +13,6 @@ const authorizate = (route = "*") => {
       });
     }
 
-    //validar o token informado
     if (!cryptoUitls.tokenValid(token)) {
       return res.status(401).send({ message: "user não autenticado." });
     }
@@ -27,7 +25,6 @@ const authorizate = (route = "*") => {
       });
     }
 
-    //verificar se o user informado pussui o privilégio necessario  para executar a route.
     if (testRoute != "*") {
       if (!userService.functionalitiesProfileValidate(userType, testRoute))
         return res.status(403).send({
@@ -35,7 +32,6 @@ const authorizate = (route = "*") => {
         });
     }
 
-    //incluir user na request
     req.user = {
       id,
       email,

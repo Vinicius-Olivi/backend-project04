@@ -29,6 +29,14 @@ const toDTO = (model) => {
         clientName: item.client.name,
       };
     }),
+    products: products.map((item) => {
+      return {
+        id: item._id,
+        supplierId: item.supplier,
+        // clientId: item.client._id,
+        // clientName: item.client.name,
+      };
+    }),
     ...residual,
   };
 };

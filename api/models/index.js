@@ -65,7 +65,7 @@ const product = mongoose.model(
 );
 
 //## CLIENT
-const clientSchema = require("./client.js");
+const clientSchema = require("./client");
 const client = user.discriminator(
   "client",
   createSchema(userSchema, clientSchema, {}),

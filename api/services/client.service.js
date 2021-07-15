@@ -30,6 +30,71 @@ const create = async (model) => {
   };
 };
 
+const list = async () => {
+  return (await client.find({})).map((item) => {
+    const { _id, name, birthdate, uf, cidade, email, ...residual } = item;
+    return {
+      id: _id,
+      name,
+      birthdate,
+      uf,
+      cidade,
+      email,
+    };
+  });
+};
+
+const searchById = async ({ user, clientid }) => {
+  //TODO: validando se adm ou o proprio client
+  if (user.userType !== 1) {
+    if (user.id !== clientid)
+      message: {
+        ("usuario nao autorizado");
+      }
+  }
+
+  const resultDB = await client.find({ _id: clientid }).populate({
+    path: "likes",
+    model: "like",
+    populate: {
+      path: "supplier",
+      model: "supplier",
+    },
+  });
+
+  if (!resultDB[0])
+    message: {
+      ("Cliente não encontrado");
+    }
+
+  const { _id, likes, name, email } = resultDB[0];
+
+  return {
+    data: {
+      id: _id,
+      name,
+      email,
+
+      likes: likes
+        ? likes.reduce((acc, item) => {
+            const { fantasyName, email } = item.supplier;
+
+            return [
+              ...acc,
+              {
+                id: item._id,
+                fantasyName,
+                email,
+              },
+            ];
+          }, [])
+        : [],
+    },
+  };
+};
+
 module.exports = {
   create,
+  list,
+  searchById,
 };

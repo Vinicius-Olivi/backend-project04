@@ -3,8 +3,6 @@ const fs = require("fs");
 const formidable = require("formidable");
 const fileUtils = require("../file.utils");
 
-// const ErrorRegraDeNegocio = require('../errors/erro-regra-negocio');
-
 const postIsValid = (files) => {
   if (!files.image || files.image.name === "") {
     return false;
@@ -60,7 +58,7 @@ const fileUpload = (destiny, isUpdate = false) => {
       req.body.image = {
         type: files.image.type,
         originalName: files.image.name,
-        originalPath: files.image.path,
+        oldPath: files.image.path,
         newName,
         newPath,
       };

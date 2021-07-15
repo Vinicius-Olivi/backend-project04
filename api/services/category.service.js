@@ -11,7 +11,7 @@ const searchById = async (categoryid) => {
 };
 
 const listAll = async () => {
-  const categoryListDB = await category.find({});
+  const categoryListDB = await category.find({}).sort({ name: 1 });
 
   return categoryListDB.map((categoryDB) => {
     return categoryMapper.toItemListDTO(categoryDB);
@@ -34,7 +34,7 @@ const categoryCreate = async (model) => {
     },
   });
 
-  fileUtils.move(model.image.originalPath, model.image.newPath);
+  fileUtils.move(model.image.oldPath, model.image.newPath);
 
   return {
     success: true,
@@ -60,10 +60,8 @@ const exclude = async (categoryId) => {
       details: ["categoryid nao existe"],
     };
   }
-  console.log("#########", categoryDB);
 
   const { image } = categoryDB;
-  // fileUtils.remove("categories", image.name);
   fileUtils.remove("categories", image.name);
 
   await category.remove(categoryDB);
@@ -87,7 +85,7 @@ const categoryUpdate = async (categoryId, model) => {
     };
   }
 
-  // fileUtils.remove("categories", categoryDB.image.name);
+  fileUtils.remove("categories", categoryDB.image.name);
 
   categoryDB.name = model.name;
   categoryDB.description = model.description;
@@ -95,7 +93,7 @@ const categoryUpdate = async (categoryId, model) => {
 
   if (model.image) {
     fileUtils.remove("categories", categoryDB.image.name);
-    fileUtils.move(model.image.originalPath, model.image.newPath);
+    fileUtils.move(model.image.oldPath, model.image.newPath);
     categoryDB.image = {
       originalName: model.image.originalName,
       name: model.image.newName,

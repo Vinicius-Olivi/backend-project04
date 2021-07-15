@@ -5,11 +5,11 @@ const fs = require("fs");
 const uuid = require("uuid").v4;
 
 const createAddress = (destiny, fileName = "") => {
-  return path.join.toString(addressSource, destiny, fileName);
+  return path.join(addressSource, destiny, fileName);
 };
 
 const createDownloadAddress = (origin, fileName) => {
-  return path.join.toString("/static", origin, fileName);
+  return path.join("/static", origin, fileName);
 };
 
 const createName = (type) => {

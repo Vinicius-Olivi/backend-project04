@@ -48,7 +48,7 @@ const create = async (model) => {
 
   await Promise.all([categoryDB.save(), supplierDB.save()]);
 
-  fileUtils.move(model.image.originalPath, model.image.newPath);
+  fileUtils.move(model.image.oldPath, model.image.newPath);
 
   return {
     success: true,
@@ -63,7 +63,7 @@ const create = async (model) => {
 const searchByFilters = async (filters) => {
   const mongoFilter = {};
 
-  if (filters.categoryid) mongoFilter.category = filters.categoryid;
+  if (filters.categoryid) mongoFilter.category = filters.categoryid || "";
 
   if (filters.supplierid) mongoFilter.supplier = filters.supplierid;
 
