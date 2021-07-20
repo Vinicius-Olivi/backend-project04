@@ -101,16 +101,19 @@ const listAll = async (filter) => {
 };
 
 const listProductsBySupplier = async (supplierid, fornecedorlogadoid) => {
-  if (supplierid !== fornecedorlogadoid) {
-    return {
-      message: "User nao autorizado",
-    };
-  }
-  const supplierFromDB = await supplier
-    .findById(supplierid)
-    .populate("products");
-
-  console.log(JSON.stringify(supplierFromDB.products));
+  // if (supplierid !== fornecedorlogadoid) {
+  //   return {
+  //     message: "User nao autorizado",
+  //   };
+  // }
+  const supplierFromDB = await supplier.findById(supplierid).populate({
+    path: "products",
+    model: "product",
+    populate: {
+      path: "category",
+      model: "category",
+    },
+  });
 
   const supplierAsJSON = supplierFromDB.toJSON();
 

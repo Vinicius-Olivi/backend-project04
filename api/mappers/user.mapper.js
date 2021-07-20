@@ -17,8 +17,6 @@ const setUserType = (type) => {
 const toUserDTO = (model) => {
   const { id, email, kind, name, fantasyName } = model;
 
-  console.log("name: ", name);
-
   return {
     id,
     email,

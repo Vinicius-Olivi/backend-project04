@@ -55,7 +55,6 @@ const list = async (req, res, next) => {
 
 const searchProductsBySupplier = async (req, res, next) => {
   const { params, user } = req;
-  console.log("@@@@@", user);
   const data = await supplierService.listProductsBySupplier(
     params.supplierid,
     user.id,

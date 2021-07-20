@@ -11,14 +11,14 @@ module.exports = (router) => {
         .messages({
           "any.required": `"category id" é um campo obrigatório`,
           "string.empty": `"category id" não deve ser vazio ###########`,
-          // "string.pattern.base": `"category id" fora do formato esperado`,
+          "string.pattern.base": `"category id" fora do formato esperado`,
         }),
       supplierid: Joi.string()
         .regex(/^[0-9a-fA-F]{24}$/)
         .messages({
           "any.required": `"supplier id" é um campo obrigatório`,
           "string.empty": `"supplier id" não deve ser vazio`,
-          // "string.pattern.base": `"supplier id" fora do formato esperado`,
+          "string.pattern.base": `"supplier id" fora do formato esperado`,
         }),
       nameLike: Joi.string(),
     }),

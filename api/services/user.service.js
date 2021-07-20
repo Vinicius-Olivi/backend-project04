@@ -29,6 +29,7 @@ const profiles = [
       "CREATE_PRODUCT",
       "REMOVE_PRODUCT",
       "SEARCH_SUPPLIER_PRODUCT",
+      "INACTIVATE_SUPPLIER",
     ],
   },
   {
@@ -107,9 +108,9 @@ const searchProfileById = (profileId) => {
   return result;
 };
 
-const functionalitiesProfileValidate = (profileId, functionalities) => {
-  const perfil = searchProfileById(profileId);
-  return perfil.functionalities.includes(functionalities);
+const functionalitiesProfileValidate = (profileId, functionalite) => {
+  const profile = searchProfileById(profileId);
+  return profile.functionalities.includes(functionalite);
 };
 
 const searchUserTypeById = (userTypeId) => {
@@ -120,9 +121,9 @@ const searchUserTypeById = (userTypeId) => {
 
 module.exports = {
   authenticate,
+  searchUserTypeById,
   create,
   ifEmailExist,
-  functionalitiesProfileValidate,
-  searchUserTypeById,
   userValidate,
+  functionalitiesProfileValidate,
 };

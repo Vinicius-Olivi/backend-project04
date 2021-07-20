@@ -48,11 +48,6 @@ const exclude = async (categoryId) => {
     _id: categoryId,
   });
 
-  console.log(categoryDB);
-
-  // const categoryDBASsJson = categoryDB.toJSON();
-  // console.log(categoryDBASsJson);
-
   if (!categoryDB) {
     return {
       success: false,

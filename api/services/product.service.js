@@ -27,7 +27,6 @@ const create = async (model) => {
       ],
     };
   }
-  console.log("~~~~~~", supplierDB);
 
   const newProduct = await product.create({
     name: model.name,
@@ -63,13 +62,12 @@ const create = async (model) => {
 const searchByFilters = async (filters) => {
   const mongoFilter = {};
 
-  if (filters.categoryid) mongoFilter.category = filters.categoryid || "";
+  if (filters.categoryid) mongoFilter.category = filters.categoryid;
 
   if (filters.supplierid) mongoFilter.supplier = filters.supplierid;
 
   if (filters.nameLike)
     mongoFilter.name = { $regex: ".*" + filters.nameLike + ".*" };
-  console.log("mongoFilterrrr", mongoFilter);
 
   const resultDB = await product.find(mongoFilter).populate("category");
   return resultDB.map((item) => {
@@ -107,7 +105,6 @@ const exclude = async ({ supplierId, productId, userId }) => {
       details: ["O product informado não existe."],
     };
   }
-  console.log(productDB.supplier.toString());
 
   if (productDB.supplier.toString() !== supplierId) {
     return {

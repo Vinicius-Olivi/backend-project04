@@ -16,7 +16,6 @@ const create = async (req, res, next) => {
 
 const list = async (req, res, next) => {
   const { query } = req;
-  // console.log("@@@@@", query);
 
   const result = await productService.searchByFilters(query);
 
@@ -27,8 +26,6 @@ const list = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   const { supplierid, productid } = req.params;
-  console.log(req.params);
-  console.log(req.user);
 
   const serviceResult = await productService.exclude({
     supplierId: supplierid,

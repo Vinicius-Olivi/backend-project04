@@ -31,6 +31,7 @@ const toDTO = (model) => {
     }),
     products: products.map((item) => {
       return {
+        name: item.name,
         id: item._id,
         supplierId: item.supplier,
         // clientId: item.client._id,
